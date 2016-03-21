@@ -6,6 +6,8 @@ private ArrayList <MSButton> bombs = new ArrayList <MSButton>();
 
 private static int NUM_ROWS = 20;
 private static int NUM_COLS = 20;
+private int nBombs = 45;
+private int bombN = 0;
 void setup ()
 {
   size(400, 400);
@@ -23,7 +25,9 @@ void setup ()
   }
   for (int b = 1; b<=45; b++) {  
     setBombs();
+  
   }
+  bombN = nBombs;
 }
 public void setBombs()
 {
@@ -34,18 +38,31 @@ public void setBombs()
   if (!bombs.contains(buttons[rNum][cNum])) {
     bombs.add(buttons[rNum][cNum]);
   }
-
 }
-
 public void draw ()
 {
   background( 0 );
   if (isWon())
     displayWinningMessage();
+//    System.out.println(bombN);
+    System.out.println(bombN);
 }
 public boolean isWon()
 {
   //your code here
+//  for(int i = 0; i<NUM_ROWS; i++){
+//         for(int j = 0; j<NUM_COLS; j++){ 
+//         if(buttons[i][j].isMarked()==true&&bombs.contains(buttons[i][j])){
+//           bombN--;
+//            if(bombN==0){
+//           return true;  
+//            }
+//         }    
+//       } 
+//     }
+  if(bombN==0){
+   return true; 
+  }
   return false;
 }
 public void displayLosingMessage()
@@ -63,6 +80,13 @@ public void displayLosingMessage()
 public void displayWinningMessage()
 {
   //your code here
+  buttons[10][7].setLabel("Y");
+  buttons[10][8].setLabel("O");
+  buttons[10][9].setLabel("U");
+  buttons[10][11].setLabel("W");
+  buttons[10][12].setLabel("I");
+  buttons[10][13].setLabel("N");
+  noLoop();
 }
 
 public class MSButton
@@ -96,12 +120,17 @@ public class MSButton
 
   public void mousePressed () {
 
-    clicked = true;
+//    clicked = true;
     //your code here
     if (mouseButton == RIGHT&&marked==false) {
+      
       marked = true;
+      if(bombs.contains(this)){
+       bombN--; 
+      }
     }
-      else if(bombs.contains(this)){
+
+      else if(bombs.contains(this)&&marked==false){
        for(int i = 0; i<NUM_ROWS; i++){
          for(int j = 0; j<NUM_COLS; j++){ 
          buttons[i][j].clicked=true;    
@@ -109,12 +138,14 @@ public class MSButton
         }
         displayLosingMessage();
        } 
-    
-  
-     else if (mouseButton == RIGHT&&marked==true) {
+       else if (mouseButton == RIGHT&&marked==true) {
       marked=false;
       clicked=false;
-    }  else if ((countBombs(r, c)>0)&&marked==false) { 
+      if(bombs.contains(this)){
+      bombN++;
+      }
+    } 
+    else if ((countBombs(r, c)>0)&&marked==false) { 
       setLabel(" " + countBombs(r, c));
     } else {
       if (isValid(r, c-1)&&(buttons[r][c-1].isClicked()==false)&&marked==false) {               
