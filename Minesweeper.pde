@@ -6,8 +6,9 @@ private ArrayList <MSButton> bombs = new ArrayList <MSButton>();
 
 private static int NUM_ROWS = 20;
 private static int NUM_COLS = 20;
-private int nBombs = 45;
+private int nBombs = 2;
 private int bombN = 0;
+private int marks = 398;
 void setup ()
 {
   size(400, 400);
@@ -23,7 +24,7 @@ void setup ()
       buttons[y][x] = new MSButton(y, x);
     }
   }
-  for (int b = 1; b<=45; b++) {  
+  for (int b = 1; b<=nBombs; b++) {  
     setBombs();
   
   }
@@ -44,23 +45,11 @@ public void draw ()
   background( 0 );
   if (isWon())
     displayWinningMessage();
-//    System.out.println(bombN);
-    System.out.println(bombN);
 }
 public boolean isWon()
 {
-  //your code here
-//  for(int i = 0; i<NUM_ROWS; i++){
-//         for(int j = 0; j<NUM_COLS; j++){ 
-//         if(buttons[i][j].isMarked()==true&&bombs.contains(buttons[i][j])){
-//           bombN--;
-//            if(bombN==0){
-//           return true;  
-//            }
-//         }    
-//       } 
-//     }
-  if(bombN==0){
+
+  if(bombN==0&&marks==0){
    return true; 
   }
   return false;
@@ -93,9 +82,9 @@ public class MSButton
 {
   private int r, c;
   private float x, y, width, height;
-  private boolean clicked, marked;
+  private boolean clicked, marked, white;
   private String label;
-  private int labelNum;
+  private int labelNum, markN;
   public MSButton ( int rr, int cc )
   {
     width = 400/NUM_COLS;
@@ -117,17 +106,20 @@ public class MSButton
     return clicked;
   }
   // called by manager
-
   public void mousePressed () {
 
-//    clicked = true;
+    clicked = true;
     //your code here
-    if (mouseButton == RIGHT&&marked==false) {
+    if(mouseButton==LEFT&& marked==false){
+    marks--;
+    }
       
+    if (mouseButton == RIGHT&&marked==false&&white==false) {
       marked = true;
       if(bombs.contains(this)){
        bombN--; 
       }
+      
     }
 
       else if(bombs.contains(this)&&marked==false){
@@ -141,42 +133,53 @@ public class MSButton
        else if (mouseButton == RIGHT&&marked==true) {
       marked=false;
       clicked=false;
+      
       if(bombs.contains(this)){
       bombN++;
       }
     } 
     else if ((countBombs(r, c)>0)&&marked==false) { 
       setLabel(" " + countBombs(r, c));
+      white = true;
     } else {
       if (isValid(r, c-1)&&(buttons[r][c-1].isClicked()==false)&&marked==false) {               
         buttons[r][c-1].mousePressed();
+         white = true;
       }
       if (isValid(r-1, c)&&(buttons[r-1][c].isClicked()==false)&&marked==false) {    
         buttons[r-1][c].mousePressed();
+        white = true;
       }
       if (isValid(r-1, c+1)&&(buttons[r-1][c+1].isClicked()==false)&&marked==false) {    
         buttons[r-1][c+1].mousePressed();
+        white = true;
       }
       if (isValid(r-1, c-1)&&(buttons[r-1][c-1].isClicked()==false)&&marked==false) {     
         buttons[r-1][c-1].mousePressed();
+        white = true;
       }
       if (isValid(r, c+1)&&(buttons[r][c+1].isClicked()==false)&&marked==false) {     
         buttons[r][c+1].mousePressed();
+        white = true;
       }
       if (isValid(r+1, c-1)&&(buttons[r+1][c-1].isClicked()==false)&&marked==false) {
         buttons[r+1][c-1].mousePressed();
+        white = true;
       }
       if (isValid(r+1, c)&&(buttons[r+1][c].isClicked()==false)&&marked==false) {
         buttons[r+1][c].mousePressed();
+        white = true;
       }
       if (isValid(r+1, c+1)&&(buttons[r+1][c+1].isClicked()==false)&&marked==false) {      
         buttons[r+1][c+1].mousePressed();
+        white = true;
       }
     }
   }
 
   public void draw () 
   {    
+    System.out.println(markN);
     if (marked)
       fill(0);
     else if ( clicked && bombs.contains(this) ) 
