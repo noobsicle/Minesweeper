@@ -6,7 +6,7 @@ private ArrayList <MSButton> bombs = new ArrayList <MSButton>();
 
 private static int NUM_ROWS = 20;
 private static int NUM_COLS = 20;
-private int nBombs = 2;
+private int nBombs = 45;
 private int bombN = 0;
 private int marks = 398;
 void setup ()
