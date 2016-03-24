@@ -179,7 +179,6 @@ public class MSButton
 
   public void draw () 
   {    
-    System.out.println(markN);
     if (marked)
       fill(0);
     else if ( clicked && bombs.contains(this) ) 
